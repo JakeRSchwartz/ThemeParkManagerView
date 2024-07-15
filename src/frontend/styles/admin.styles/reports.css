@@ -1,0 +1,70 @@
+.ReportsContainer {
+  width: 1000px;
+  height: 650px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.MainReportCont {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.ReportLinkGame {
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
+    'Lucida Sans', Arial, sans-serif;
+  font-size: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32%;
+  height: 250px;
+  border: 1px solid black;
+  margin: 20px;
+  box-shadow: 0px 0px 10px 0px black;
+  transition: 0.3s;
+}
+.ReportLinkRide {
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
+    'Lucida Sans', Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32%;
+  height: 250px;
+  border: 1px solid black;
+  margin: 10px;
+  font-size: 25px;
+  border: 1px solid black;
+  box-shadow: 0px 0px 10px 0px black;
+  transition: 0.3s;
+}
+.ReportLinkMain {
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
+    'Lucida Sans', Arial, sans-serif;
+  font-size: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  width: 32%;
+  height: 250px;
+  margin: 10px;
+  border: 1px solid black;
+  box-shadow: 0px 0px 10px 0px black;
+  transition: 0.3s;
+}
+.ReportLinkMain:hover,
+.ReportLinkGame:hover,
+.ReportLinkRide:hover {
+  background-color: #f8f8f8;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  scale: 1.05;
+  box-shadow: 0px 0px 10px 0px red;
+}

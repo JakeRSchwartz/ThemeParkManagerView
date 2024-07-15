@@ -1,0 +1,205 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+.homeContainer {
+  background-color: white;
+  width: 93vw;
+  height: 100%;
+  margin: 10px;
+  float: right;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  grid-gap: 5px;
+  grid-template-areas:
+    'minichart1 minichart1 minichart1 adinfo2'
+    'minichart1 minichart1 minichart1 adinfo2'
+    'adchart1 adchart1 adchart1 adinfo2'
+    'adchart1 adchart1 adchart1 adinfo2'
+    'adinfo1 adinfo1 adinfo1 adinfo2'
+    'adinfo1 adinfo1 adinfo1 adinfo2';
+}
+
+.Navitem:hover {
+  background-color: whitesmoke;
+  color: white;
+  cursor: pointer;
+}
+
+.adminnav {
+  border-radius: 5px;
+  width: auto;
+  overflow-x: hidden;
+  height: 100%;
+}
+.AdminLinkCont {
+  display: block;
+  padding: 10px;
+  list-style: none;
+}
+.AdminLinkCont li {
+  padding: 15px;
+  font-size: 20px;
+  text-decoration: none;
+  display: block;
+  position: relative;
+}
+
+.adminHeader {
+  background-color: whitesmoke;
+  display: flex;
+  grid-area: adminHeader;
+  border-radius: 5px;
+  padding: 10px;
+  object-fit: cover;
+  width: 100%;
+  height: 220px;
+}
+.advid {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  border-radius: 5px;
+}
+.minichart1 {
+  grid-area: minichart1;
+  border: 0.6px solid black;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.minichart2 {
+  grid-area: minichart2;
+  border: 0.6px solid black;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.minichart3 {
+  grid-area: minichart3;
+  border: 0.6px solid black;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.minichart4 {
+  grid-area: minichart4;
+  border: 0.6px solid black;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.adchart1 {
+  grid-area: adchart1;
+  border: 0.6px solid black;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.adchart2 {
+  grid-area: adchart2;
+  border: 0.6px solid black;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  height: 320px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.adinfo1 {
+  grid-area: adinfo1;
+  border: 0.6px solid black;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.adinfo2 {
+  grid-area: adinfo2;
+  border: 0.6px solid black;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  overflow: hidden;
+}
+
+.scheduleform {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 500px;
+  height: 500px;
+  margin: auto;
+}
+.addbtn {
+  width: 200px;
+  margin-left: px;
+}
+.centering {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 30px;
+}
+.scheduleform {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 500px;
+  height: 500px;
+  margin: auto;
+}
+.rbc-toolbar {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rbc-btn-group {
+  margin: 0 5px;
+  button {
+    color: black;
+    background-color: transparent;
+    border: 1px solid gray;
+  }
+}
+.inventory-table {
+  width: 990px;
+  margin-top: 20px;
+  height: 350px;
+  border-collapse: collapse;
+}
+
+.inventory-table th,
+.inventory-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.inventory-table th {
+  background-color: #f4f4f4;
+}
+
+.inventory-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.inventory-table tr:hover {
+  background-color: #f1f1f1;
+}

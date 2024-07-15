@@ -1,0 +1,15 @@
+.TikTitle {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.TikTitle h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #000;
+
+}
+.TikNum {
+  font-size: 100px;
+}

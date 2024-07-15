@@ -1,0 +1,22 @@
+.CustomerLinks {
+  display: flex;
+  justify-content: flex-end;
+}
+.Customerlinks-container {
+  margin-left: auto;
+}
+.CustomerLinksUl {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.CustomerLinks-ul-li {
+  display: inline-block;
+  margin-left: 5px;
+  margin-right: 10px;
+}
+
+.Links ul li:first-child {
+  margin-left: 0;
+}

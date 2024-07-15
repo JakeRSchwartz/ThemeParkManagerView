@@ -1,0 +1,57 @@
+.maintcontainer {
+  width: 95%;
+  float: right;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 260px;
+  grid-template-rows: 1fr 1fr, 1fr;
+  grid-gap: 8px;
+  grid-template-areas:
+    'table1 table1 notif'
+    'table2 table2 notif'
+    'table3 table3 notif';
+  margin: 5px;
+}
+
+.maintTable {
+  grid-area: table1;
+  border: solid 1px black;
+  overflow: hidden;
+  border: 0.6px solid black;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+
+  width: 100%;
+}
+
+.notificationArea {
+  grid-area: notif;
+  border: solid 1px black;
+  border: 0.6px solid black;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  overflow: hidden;
+}
+.maintTable2 {
+  grid-area: table2;
+  border: solid 1px black;
+  border: 0.6px solid black;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  overflow: hidden;
+  width: 100%;
+}
+.maintTable3 {
+  grid-area: table3;
+  border: solid 1px black;
+  border: 0.6px solid black;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.MaintDeleteBtn {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  padding: 10px;
+  margin-left: 800px;
+}

@@ -1,0 +1,162 @@
+.CustomerHeader {
+  height: 180px;
+  top: 0;
+  z-index:10;
+  box-shadow: 0 6px 9px 0 rgba(0, 0.3, 0.2, 0.4);
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  background-color: white;
+}
+.MainLogoCustomer {
+  height: 10px;
+  width: 10px;
+  margin-left: 10px;
+}
+.LoginBtn {
+  margin: 10px;
+  padding: 10px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  width: 100px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #e92603;
+  border: 2px solid black;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+body,
+html {
+  overflow-x: hidden;
+}
+
+.LoginBtn:hover {
+  background-color: #e92603;
+  border: 2px solid black;
+  color: white;
+  scale: 1.1;
+  transition: 0.5s;
+}
+.LinksCustomer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 10px;
+}
+.links-cust {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 10px;
+}
+.TitleForType {
+  font-size: 50px; /* Adjust size as needed */
+  font-weight: bold;
+  margin: 10px;
+  font-family: 'Pacifico', cursive; /* Using the Pacifico font for a cursive look */
+  color: black; /* Vibrant red color for the text */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2),
+    /* Creates depth */ -1px -1px 2px rgba(255, 255, 255, 0.3); /* Soft light from opposite direction */
+  transition: all 0.3s ease; /* Smooth transition for hover effects */
+  width: 300px;
+}
+
+.TitleForType:hover {
+  color: #ff6347; /* Lighter shade of red on hover for interaction feedback */
+  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3),
+    /* Enhanced depth on hover */ -1px -1px 2px rgba(255, 255, 255, 0.4); /* Brighter contrast light on hover */
+  transform: scale(
+    1.05
+  ); /* Slightly enlarges the title on hover for emphasis */
+}
+.itemHeader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px; /* Adjust size as needed */
+  font-weight: bold;
+  font-family: 'Pacifico', cursive; /* Using the Pacifico font for a cursive look */
+  color: black; /* Vibrant red color for the text */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2),
+    /* Creates depth */ -1px -1px 2px rgba(255, 255, 255, 0.3); /* Soft light from opposite direction */
+  transition: all 0.3s ease; /* Smooth transition for hover effects */
+  z-index: -1;
+}
+.itemHeader:hover {
+  color: #ff6347; /* Lighter shade of red on hover for interaction feedback */
+  text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3),
+    /* Enhanced depth on hover */ -1px -1px 2px rgba(255, 255, 255, 0.4); /* Brighter contrast light on hover */
+  transform: scale(
+    1.05
+  ); /* Slightly enlarges the title on hover for emphasis */
+}
+.close {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.popup-overlay {
+  backdrop-filter: blur(5px);
+}
+.User {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; /* Space between the icon and the text */
+  font-size: 16px; /* Adjusted for better readability */
+  font-weight: bold;
+  color: black; /* Darker color for better contrast */
+  padding: 8px 12px; /* Padding for better touch interaction */
+  border-radius: 20px; /* Rounded corners for a modern look */
+  text-decoration: none;
+  transition: all 0.3s ease; /* Smooth transition for hover effects */
+  background-color: white; /* Light background for the button */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+}
+
+.User:hover {
+  color: red; /* Lighter shade of red on hover */
+  background-color: #fff; /* Lighter background on hover */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+  transform: scale(1.1); /* Slight scale for emphasis */
+}
+.checkbox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.EntryBtn{
+  width: 100%;
+font-weight: bold;
+padding: 17px 0;
+background-color: #cc0000;
+color: black;
+border-radius: 4px;
+text-align: center;
+font-size: 18px;
+cursor: pointer;
+transition: all 250ms;
+letter-spacing: 1.5px;
+margin-top: 6px;
+margin-bottom: 12px;
+opacity: 0.9;
+border-radius:10px;
+}
+.EntryBtn:hover {
+  background-color: #ff0000;
+}
+
