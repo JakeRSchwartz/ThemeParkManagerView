@@ -4,6 +4,10 @@
 
 Due to cost constraints, this project is no longer hosted online. This README provides detailed instructions on how to set up and run this project locally for development and testing purposes.
 
+## Archived Project
+
+This project is now archived and viewable to the public. This is not the original repository with commit history hidden due to data integrity. 
+
 ## Prerequisites
 
 Before you begin, ensure you have the following installed:
