@@ -25,13 +25,29 @@ If applicable, clone the repository to get a local copy on your machine:
 git clone https://yourrepositorylink.com
 cd your-project-folder
 
-### 2. Set Up the Frontend
+### 2. Set Up the Database
+Download DumpFile: scp username@remote_host:/path/to/ThemeParkDBDump.sql /local/path/to/ThemeParkDBDump.sql
+
+Import Dumpfile into MySQL: mysql -u [username] -p[password] [database_name] < ThemeParkDBDump.sql
+
+TIP: To add user admin user role, please make admin role in MySQL or via SQL INSERT.
+
+Update database connection settings:
+Ensure your local web application is configured to connect to the local database. Update your application's configuration files with the local database credentials.
+DATABASE_CONFIG = {
+'host': 'localhost',
+'user': 'your_local_username',
+'password': 'your_local_password',
+'database': 'your_local_database_name'
+}
+
+### 3. Set Up the Frontend
 
 cd path/to/src/frontend
 npm install
 Start the development server: npm run dev
 
-### 3. Set up the Backend
+### 4. Set up the Backend
 
 cd path/to/src/backend
 npm install
