@@ -7,7 +7,7 @@ const pool = createPool({
  // host: HOST,
  // user: USER,
  // password: PASSWORD,
- // database: DATABASE, ,
+ // database: DATABASE,
 })
 pool
   .getConnection()
