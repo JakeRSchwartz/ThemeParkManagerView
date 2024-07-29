@@ -1,6 +1,4 @@
 -- MySQL dump 10.13  Distrib 8.0.34, for macos13 (arm64)
---
--- Host: coogsparkdb.c1wwoyeg8st9.us-east-2.rds.amazonaws.com    Database: coogsparkdb
 -- ------------------------------------------------------
 -- Server version	8.0.35
 
