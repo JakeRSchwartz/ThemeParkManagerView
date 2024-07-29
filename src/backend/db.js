@@ -4,10 +4,10 @@ import 'dotenv/config'
 
 //PLEASE CHANGE THE ENVIRONMENT VARIABLES TO YOUR OWN DATABASE CONFIGURATION IN LOCALHOST
 const pool = createPool({
-  host: "127.0.0.1",
-  user: "root",
-  password: "Diesel12!",
-  database: "ThemeParkDB",
+ // host: HOST,
+ // user: USER,
+ // password: PASSWORD,
+ // database: DATABASE, ,
 })
 pool
   .getConnection()
