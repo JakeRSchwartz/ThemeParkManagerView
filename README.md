@@ -25,14 +25,34 @@ If applicable, clone the repository to get a local copy on your machine:
 git clone https://yourrepositorylink.com
 cd your-project-folder
 
+### 2. Set Up the DB
+Download Dumpfile: scp username@remote_host:/path/to/database_dump.sql /local/path/to/database_dump.sql
 
-### 2. Set Up the Frontend
+Import dumpfile into MySQL: mysql -u [username] -p[password] [database_name] < database_dump.sql
+
+Don't forget: Add admin User_Account to use admin since data is not transferring. 
+
+Configure Your Local Environment
+Update database connection settings:
+Ensure your local web application is configured to connect to the local database. Update your application's configuration files with the local database credentials.
+
+In src/backend/db.js
+ DATABASE_CONFIG = {
+'host': 'localhost',
+'user': 'your_local_username',
+'password': 'your_local_password',
+'database': 'your_local_database_name'
+}
+
+
+### 3. Set Up the Frontend
 
 cd path/to/src/frontend
 npm install
 Start the development server: npm run dev
 
-### 3. Set up the Backend
+
+### 4. Set up the Backend
 
 cd path/to/src/backend
 npm install
