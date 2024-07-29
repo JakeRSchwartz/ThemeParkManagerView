@@ -30,7 +30,7 @@ Download Dumpfile: scp username@remote_host:/path/to/database_dump.sql /local/pa
 
 Import dumpfile into MySQL: mysql -u [username] -p[password] [database_name] < database_dump.sql
 
-Don't forget: Add admin User_Account to use admin since data is not transferring. 
+Don't forget: Add Use "Name of DB" to top of dump file when importing into local db. 
 
 Configure Your Local Environment
 Update database connection settings:
