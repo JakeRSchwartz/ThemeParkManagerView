@@ -9,7 +9,7 @@ Due to cost constraints, this project is no longer hosted online. This README pr
 This project is now archived and viewable to the public. This is not the original repository with commit history hidden due to data integrity. 
 
 ## Demo Video
-![Demo Video](https://youtu.be/Jk1ggN0rqkE)
+[![Demo Video](https://img.youtube.com/vi/Jk1ggN0rqkE/maxresdefault.jpg)](https://youtu.be/Jk1ggN0rqkE)
 
 
 ## Prerequisites
