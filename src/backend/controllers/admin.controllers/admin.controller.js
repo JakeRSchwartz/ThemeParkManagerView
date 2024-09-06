@@ -153,130 +153,141 @@ export const GetRideData = async (req, res) => {
     res.status(500).send('Server error')
   }
 }
-
 export const GetGameData = async (req, res) => {
   const { type, item_id, start_date, end_date } = req.body
-  console.log(req.body)
   try {
     if (type === 'rides') {
       if (item_id === '*') {
         const sqlQuery = `SELECT 
-    U.first_name,
-    U.last_name,
-    U.email,
-    DATE_FORMAT(RV.visit_date, '%Y-%m-%d') AS date,
-    R.name AS name,
-    SUM(RV.cost) AS total_spent,
-    RV.num_tickets AS total_tickets
-FROM
-    Ride_Visited RV
-JOIN
-    Rides R ON RV.ride_id = R.ride_id
-JOIN
-    User_Account U ON RV.account_id = U.account_id
-WHERE
-    RV.visit_date BETWEEN ? AND ?
-GROUP BY
-    U.account_id, U.first_name, U.last_name, U.email, RV.visit_date, R.name
-`
+          U.first_name,
+          U.last_name,
+          U.email,
+          DATE_FORMAT(RV.visit_date, '%Y-%m-%d') AS date,
+          R.name AS name,
+          SUM(RV.cost) AS total_spent,
+          SUM(RV.num_tickets) AS total_tickets
+        FROM
+          Ride_Visited RV
+        JOIN
+          Rides R ON RV.ride_id = R.ride_id
+        JOIN
+          User_Account U ON RV.account_id = U.account_id
+        WHERE
+          RV.visit_date BETWEEN ? AND ?
+        GROUP BY
+          U.account_id, U.first_name, U.last_name, U.email, DATE_FORMAT(RV.visit_date, '%Y-%m-%d'), R.name
+        ORDER BY
+          DATE_FORMAT(RV.visit_date, '%Y-%m-%d') DESC;
+        `
         const Data = await pool.query(sqlQuery, [start_date, end_date])
         console.log(Data[0])
         res.status(202).json({ Data: Data[0] })
       } else {
         const sql = `SELECT 
-    DATE_FORMAT(RV.visit_date,'%Y-%m-%d') AS date,
-    U.first_name,
-    U.last_name,
-    U.email,
-    R.name AS name,
-    SUM(RV.cost) AS total_spent,
-    RV.num_tickets AS total_tickets
-FROM
-    Ride_Visited RV
-JOIN
-    Rides R ON RV.ride_id = R.ride_id
-JOIN
-    User_Account U ON RV.account_id = U.account_id
-WHERE
-    RV.ride_id = ?
-    AND RV.visit_date BETWEEN ? AND ?
-GROUP BY
-    U.account_id, U.first_name, U.last_name, U.email, R.name, RV.visit_date
-
-`
+          DATE_FORMAT(RV.visit_date,'%Y-%m-%d') AS date,
+          U.first_name,
+          U.last_name,
+          U.email,
+          R.name AS name,
+          SUM(RV.cost) AS total_spent,
+          SUM(RV.num_tickets) AS total_tickets
+        FROM
+          Ride_Visited RV
+        JOIN
+          Rides R ON RV.ride_id = R.ride_id
+        JOIN
+          User_Account U ON RV.account_id = U.account_id
+        WHERE
+          RV.ride_id = ?
+          AND RV.visit_date BETWEEN ? AND ?
+        GROUP BY
+          U.account_id, U.first_name, U.last_name, U.email, DATE_FORMAT(RV.visit_date, '%Y-%m-%d'), R.name
+        ORDER BY
+          DATE_FORMAT(RV.visit_date, '%Y-%m-%d') DESC;
+        `
         const Data = await pool.query(sql, [item_id, start_date, end_date])
         console.log(Data[0])
         res.status(202).json({ Data: Data[0] })
       }
     }
+
     if (type === 'games') {
       if (item_id === '*') {
         const sqlQuery = `SELECT
-    DATE_FORMAT(GV.date_visited, '%Y-%m-%d') AS date,
-    U.first_name,
-    U.last_name,
-    U.email,
-    G.name AS name,
-    SUM(GV.cost) AS total_spent,
-    GV.num_tickets AS total_tickets
-FROM
-    Game_Visited GV
-JOIN
-    Games G ON GV.game_id = G.game_id
-JOIN
-    User_Account U ON GV.account_id = U.account_id
-WHERE
-    GV.date_visited BETWEEN ? AND ?
-GROUP BY
-    U.account_id, U.first_name, U.last_name, U.email, G.name, GV.date_visited;
+          DATE_FORMAT(GV.date_visited, '%Y-%m-%d') AS date,
+          U.first_name,
+          U.last_name,
+          U.email,
+          G.name AS name,
+          SUM(GV.cost) AS total_spent,
+          SUM(GV.num_tickets) AS total_tickets
+        FROM
+          Game_Visited GV
+        JOIN
+          Games G ON GV.game_id = G.game_id
+        JOIN
+          User_Account U ON GV.account_id = U.account_id
+        WHERE
+          GV.date_visited BETWEEN ? AND ?
+        GROUP BY
+          U.account_id, U.first_name, U.last_name, U.email, DATE_FORMAT(GV.date_visited, '%Y-%m-%d'), G.name
+        ORDER BY
+          DATE_FORMAT(GV.date_visited, '%Y-%m-%d') DESC;
         `
         const Data = await pool.query(sqlQuery, [start_date, end_date])
         res.status(202).json({ Data: Data[0] })
       } else {
         const sql = `SELECT
-    DATE_FORMAT(GV.date_visited,'%Y-%m-%d') AS date,
-    U.first_name,
-    U.last_name,
-    U.email,
-    G.name AS name,
-    SUM(GV.cost) AS total_spent,
-    GV.num_tickets AS total_tickets
-FROM
-    Game_Visited GV
-JOIN
-    Games G ON GV.game_id = G.game_id
-JOIN
-    User_Account U ON GV.account_id = U.account_id
-WHERE
-    GV.game_id = ? AND
-    GV.date_visited BETWEEN ? AND ?
-GROUP BY
-    U.account_id, U.first_name, U.last_name, U.email, G.name, GV.date_visited;
-  `
+          DATE_FORMAT(GV.date_visited,'%Y-%m-%d') AS date,
+          U.first_name,
+          U.last_name,
+          U.email,
+          G.name AS name,
+          SUM(GV.cost) AS total_spent,
+          SUM(GV.num_tickets) AS total_tickets
+        FROM
+          Game_Visited GV
+        JOIN
+          Games G ON GV.game_id = G.game_id
+        JOIN
+          User_Account U ON GV.account_id = U.account_id
+        WHERE
+          GV.game_id = ? AND
+          GV.date_visited BETWEEN ? AND ?
+        GROUP BY
+          U.account_id, U.first_name, U.last_name, U.email, DATE_FORMAT(GV.date_visited, '%Y-%m-%d'), G.name
+        ORDER BY
+          DATE_FORMAT(GV.date_visited, '%Y-%m-%d') DESC;
+        `
         const Data = await pool.query(sql, [item_id, start_date, end_date])
         console.log(Data[0])
         res.status(202).json({ Data: Data[0] })
       }
-    } else if (type === 'attractions') {
+    }
+
+    if (type === 'attractions') {
       if (item_id === '*') {
         const sqlQuery = `SELECT
-        DATE_FORMAT(AV.visit_date,'%Y-%m-%d') AS date,
-        U.first_name,
-        U.last_name,
-        U.email,
-        A.name AS name,
-        SUM(AV.cost) AS total_spent,
-        AV.num_tickets AS total_tickets
+          DATE_FORMAT(AV.visit_date,'%Y-%m-%d') AS date,
+          U.first_name,
+          U.last_name,
+          U.email,
+          A.name AS name,
+          SUM(AV.cost) AS total_spent,
+          SUM(AV.num_tickets) AS total_tickets
         FROM
-        Attraction_Visited AV
+          Attraction_Visited AV
         JOIN
-        Attraction A ON AV.attraction_id = A.attraction_id
+          Attraction A ON AV.attraction_id = A.attraction_id
         JOIN
-        User_Account U ON AV.account_id = U.account_id
+          User_Account U ON AV.account_id = U.account_id
         WHERE
-        AV.visit_date BETWEEN ? AND ?
+          AV.visit_date BETWEEN ? AND ?
         GROUP BY
-        U.account_id, U.first_name, U.last_name, U.email, A.name, AV.visit_date;`
+          U.account_id, U.first_name, U.last_name, U.email, DATE_FORMAT(AV.visit_date, '%Y-%m-%d'), A.name
+        ORDER BY
+          DATE_FORMAT(AV.visit_date, '%Y-%m-%d') DESC;
+        `
         const Data = await pool.query(sqlQuery, [start_date, end_date])
         console.log(Data[0])
         res.status(202).json({ Data: Data[0] })
@@ -288,18 +299,20 @@ GROUP BY
           U.email,
           A.name AS name,
           SUM(AV.cost) AS total_spent,
-          AV.num_tickets AS total_tickets
-          FROM
+          SUM(AV.num_tickets) AS total_tickets
+        FROM
           Attraction_Visited AV
-          JOIN
+        JOIN
           Attraction A ON AV.attraction_id = A.attraction_id
-          JOIN
+        JOIN
           User_Account U ON AV.account_id = U.account_id
-          WHERE
+        WHERE
           AV.attraction_id = ? AND
           AV.visit_date BETWEEN ? AND ?
-          GROUP BY
-          U.account_id, U.first_name, U.last_name, U.email, A.name, AV.visit_date;
+        GROUP BY
+          U.account_id, U.first_name, U.last_name, U.email, DATE_FORMAT(AV.visit_date, '%Y-%m-%d'), A.name
+        ORDER BY
+          DATE_FORMAT(AV.visit_date, '%Y-%m-%d') DESC;
         `
         const Data = await pool.query(sql, [item_id, start_date, end_date])
         console.log(Data[0])
@@ -311,38 +324,40 @@ GROUP BY
     res.status(500).send(err.message)
   }
 }
+
 export const GetActivityChart = async (req, res) => {
   try {
     const { type, item_id, start_date, end_date } = req.body
     console.log(req.body)
+
     if (type === 'rides') {
       if (item_id === '*') {
         const sqlQuery = `SELECT
-        R.name AS name,
-        SUM(RV.num_tickets) AS tickets
-        FROM
-        Rides R
-        JOIN
-        Ride_Visited RV ON R.ride_id = RV.ride_id
-        WHERE
-        RV.visit_date BETWEEN ? AND ?
-        GROUP BY
-        R.name;
+          R.name AS name,
+          SUM(RV.num_tickets) AS tickets
+          FROM
+          Rides R
+          JOIN
+          Ride_Visited RV ON R.ride_id = RV.ride_id
+          WHERE
+          RV.visit_date BETWEEN ? AND ?
+          GROUP BY
+          R.name;
         `
         const activityData = await pool.query(sqlQuery, [start_date, end_date])
         res.status(203).json({ activityData: activityData[0] })
       } else {
         const sqlQuery = `SELECT
-      DATE_FORMAT(RV.visit_date, '%Y-%m-%d') AS updatedDate,
-      SUM(RV.num_tickets) AS tickets
-      FROM
-      Ride_Visited RV
-      WHERE
-      RV.visit_date BETWEEN ? AND ? AND
-      RV.ride_id = ?
-      GROUP BY
-      RV.visit_date;
-      `
+          DATE_FORMAT(RV.visit_date, '%Y-%m-%d') AS updatedDate,
+          SUM(RV.num_tickets) AS tickets
+          FROM
+          Ride_Visited RV
+          WHERE
+          RV.visit_date BETWEEN ? AND ? AND
+          RV.ride_id = ?
+          GROUP BY
+          DATE(RV.visit_date);  -- Fixed grouping by date
+        `
         const activityData = await pool.query(sqlQuery, [
           start_date,
           end_date,
@@ -354,31 +369,31 @@ export const GetActivityChart = async (req, res) => {
     } else if (type === 'games') {
       if (item_id === '*') {
         const sqlQuery = `SELECT
-      G.name AS name,
-      SUM(GV.num_tickets) AS tickets
-      FROM
-      Games G
-      JOIN
-      Game_Visited GV ON G.game_id = GV.game_id
-      WHERE
-      GV.date_visited BETWEEN ? AND ?
-      GROUP BY
-      G.name;
-      `
+          G.name AS name,
+          SUM(GV.num_tickets) AS tickets
+          FROM
+          Games G
+          JOIN
+          Game_Visited GV ON G.game_id = GV.game_id
+          WHERE
+          GV.date_visited BETWEEN ? AND ?
+          GROUP BY
+          G.name;
+        `
         const activityData = await pool.query(sqlQuery, [start_date, end_date])
         res.status(203).json({ activityData: activityData[0] })
       } else {
         const sqlQuery = `SELECT
-    DATE_FORMAT(GV.date_visited,'%Y-%m-%d') AS updatedDate,
-    SUM(GV.num_tickets) AS tickets
-    FROM
-    Game_Visited GV
-    WHERE
-    GV.date_visited BETWEEN ? AND ? AND
-    GV.game_id = ?
-    GROUP BY
-    GV.date_visited;
-    `
+          DATE_FORMAT(GV.date_visited,'%Y-%m-%d') AS updatedDate,
+          SUM(GV.num_tickets) AS tickets
+          FROM
+          Game_Visited GV
+          WHERE
+          GV.date_visited BETWEEN ? AND ? AND
+          GV.game_id = ?
+          GROUP BY
+          DATE(GV.date_visited);  -- Fixed grouping by date
+        `
         const activityData = await pool.query(sqlQuery, [
           start_date,
           end_date,
@@ -386,34 +401,34 @@ export const GetActivityChart = async (req, res) => {
         ])
         res.status(202).json({ activityData: activityData[0] })
       }
-    } else {
+    } else if (type === 'attractions') {
       if (item_id === '*') {
         const sqlQuery = `SELECT
-    A.name AS name,
-    SUM(AV.num_tickets) AS tickets
-    FROM
-    Attraction A
-    JOIN
-    Attraction_Visited AV ON A.attraction_id = AV.attraction_id
-    WHERE
-    AV.visit_date BETWEEN ? AND ?
-    GROUP BY
-    A.name;
-    `
+          A.name AS name,
+          SUM(AV.num_tickets) AS tickets
+          FROM
+          Attraction A
+          JOIN
+          Attraction_Visited AV ON A.attraction_id = AV.attraction_id
+          WHERE
+          AV.visit_date BETWEEN ? AND ?
+          GROUP BY
+          A.name;
+        `
         const activityData = await pool.query(sqlQuery, [start_date, end_date])
         res.status(203).json({ activityData: activityData[0] })
       } else {
         const sqlQuery = `SELECT
-  DATE_FORMAT(AV.visit_date,'%Y-%m-%d') AS updatedDate,
-  SUM(AV.num_tickets) AS tickets
-  FROM
-  Attraction_Visited AV
-  WHERE
-  AV.visit_date BETWEEN ? AND ? AND
-  AV.attraction_id = ?
-  GROUP BY
-  AV.visit_date;
-  `
+          DATE_FORMAT(AV.visit_date,'%Y-%m-%d') AS updatedDate,
+          SUM(AV.num_tickets) AS tickets
+          FROM
+          Attraction_Visited AV
+          WHERE
+          AV.visit_date BETWEEN ? AND ? AND
+          AV.attraction_id = ?
+          GROUP BY
+          DATE(AV.visit_date);  -- Fixed grouping by date
+        `
         const activityData = await pool.query(sqlQuery, [
           start_date,
           end_date,
@@ -753,29 +768,30 @@ export const DeleteEmp = async (req, res) => {
     res.status(500).send('Server error')
   }
 }
-
 export const adminchart1 = async (req, res) => {
-  const dateNow = new Date(Date.now())
   try {
-    const sqlQuery = `SELECT 
-    WEEKDAY(entry_date) AS day_of_week, 
-    COUNT(entry_pass_id) AS passes_purchased
-FROM 
-    Entry_Pass
-WHERE 
-    entry_date >= CURDATE() - INTERVAL 7 DAY
-GROUP BY 
-    WEEKDAY(entry_date)
-ORDER BY 
-    entry_date DESC;
-`
-    const chartData = await pool.query(sqlQuery, [dateNow])
-    res.status(202).json({ chartData: chartData[0] })
+    const sqlQuery = `
+      SELECT 
+        WEEKDAY(entry_date) AS day_of_week, 
+        COUNT(entry_pass_id) AS passes_purchased
+      FROM 
+        Entry_Pass
+      WHERE 
+        entry_date >= CURDATE() - INTERVAL 7 DAY
+      GROUP BY 
+        WEEKDAY(entry_date)
+      ORDER BY 
+        WEEKDAY(entry_date) ASC;
+    `
+
+    const [chartData] = await pool.query(sqlQuery)
+    res.status(202).json({ chartData })
   } catch (err) {
     console.error(err.message)
     res.status(500).send('Server error')
   }
 }
+
 export const chart2rides = async (req, res) => {
   const dateNow = new Date(Date.now())
   try {
@@ -934,30 +950,37 @@ export const AddShift = async (req, res) => {
   const { type, name, employee_id, shift, date } = req.body
   const currentDate = new Date(date)
 
-  // Add one day to the current updatedDate
+  // Add one day to the current date
   currentDate.setDate(currentDate.getDate() + 1)
 
-  // Convert the updated updatedDate back to the desired format (e.g., YYYY-MM-DD)
+  // Convert the updated date back to the desired format (e.g., YYYY-MM-DD)
   const updatedDate = currentDate.toISOString().split('T')[0]
 
   console.log(req.body)
-  if (type === 'rides') {
-    try {
-      const hours = await pool.query(
-        `SELECT COUNT(*) AS count 
-FROM Attendent_Schedule 
-WHERE attendant_id = ? 
-  AND shift_date >= DATE_SUB(NOW(), INTERVAL WEEKDAY(NOW()) DAY) 
-  AND shift_date < DATE_ADD(DATE_SUB(NOW(), INTERVAL WEEKDAY(NOW()) DAY), INTERVAL 7 DAY);
-`,
-        [employee_id]
-      )
-      const TotalHours = hours[0][0].count * 4
-      if (TotalHours >= 37) {
-        return res.status(404).json({ message: 'Employee is over 40 Hours' })
-      }
 
-      const count = await pool.query(
+  try {
+    const hours = await pool.query(
+      `SELECT COUNT(*) AS count 
+      FROM Attendent_Schedule 
+      WHERE attendant_id = ? 
+        AND shift_date >= DATE_SUB(NOW(), INTERVAL WEEKDAY(NOW()) DAY) 
+        AND shift_date < DATE_ADD(DATE_SUB(NOW(), INTERVAL WEEKDAY(NOW()) DAY), INTERVAL 7 DAY);`,
+      [employee_id]
+    )
+    const TotalHours = hours[0][0].count * 4
+
+    if (TotalHours >= 37) {
+      return res.status(404).json({ message: 'Employee is over 40 Hours' })
+    }
+
+    let count
+    let hasShift
+    let isRainedout
+    let isBroken
+
+    // Handle 'rides' type
+    if (type === 'rides') {
+      count = await pool.query(
         'SELECT COUNT(*) AS count FROM Attendent_Schedule WHERE ride_id = ? AND shift_date = ? AND shifts = ?',
         [name, updatedDate, shift]
       )
@@ -966,8 +989,9 @@ WHERE attendant_id = ?
           .status(404)
           .json({ message: 'Too many people on specific shift' })
       }
-      const hasShift = await pool.query(
-        `SELECT COUNT(*) AS count FROM Attendent_Schedule WHERE attendant_id = ? AND shift_date = ? AND shifts = ?`,
+
+      hasShift = await pool.query(
+        'SELECT COUNT(*) AS count FROM Attendent_Schedule WHERE attendant_id = ? AND shift_date = ? AND shifts = ?',
         [employee_id, updatedDate, shift]
       )
       if (hasShift[0][0].count > 0) {
@@ -975,45 +999,30 @@ WHERE attendant_id = ?
           .status(404)
           .json({ message: 'Employee already has a shift at that time' })
       }
-      const isRainedout = await pool.query(
+
+      isRainedout = await pool.query(
         'SELECT COUNT(*) AS count FROM Rides WHERE ride_id = ? AND rained_out = 1',
         [name]
       )
       if (isRainedout[0][0].count > 0) {
         return res.status(404).json({ message: 'Ride is rained out' })
       }
-      const isBroken = await pool.query(
+
+      isBroken = await pool.query(
         'SELECT COUNT(*) AS count FROM Rides WHERE ride_id = ? AND broken = 1',
         [name]
       )
       if (isBroken[0][0].count > 0) {
         return res.status(404).json({ message: 'Ride is broken' })
       }
+
       const sql = `INSERT INTO Attendent_Schedule (ride_id, attendant_id, shifts, shift_date) VALUES (?, ?, ?, ?)`
       await pool.query(sql, [name, employee_id, shift, updatedDate])
-      res.status(200).json({ message: 'Shift added' })
-    } catch (err) {
-      console.error(err.message)
-      res.status(500).send('Server error')
-    }
-  }
-  if (type === 'games') {
-    try {
-      const hours = await pool.query(
-        `SELECT COUNT(*) AS count 
-FROM Attendent_Schedule 
-WHERE attendant_id = ? 
-  AND shift_date >= DATE_SUB(NOW(), INTERVAL WEEKDAY(NOW()) DAY) 
-  AND shift_date < DATE_ADD(DATE_SUB(NOW(), INTERVAL WEEKDAY(NOW()) DAY), INTERVAL 7 DAY);
-`,
-        [employee_id]
-      )
-      const TotalHours = hours[0][0].count * 4
-      if (TotalHours >= 37) {
-        return res.status(404).json({ message: 'Employee is over 40 Hours' })
-      }
+      return res.status(200).json({ message: 'Shift added' })
 
-      const count = await pool.query(
+      // Handle 'games' type
+    } else if (type === 'games') {
+      count = await pool.query(
         'SELECT COUNT(*) AS count FROM Attendent_Schedule WHERE game_id = ? AND shift_date = ? AND shifts = ?',
         [name, updatedDate, shift]
       )
@@ -1022,53 +1031,40 @@ WHERE attendant_id = ?
           .status(404)
           .json({ message: 'Too many people on specific shift' })
       }
-      const hasShift = await pool.query(
-        `SELECT COUNT(*) AS count FROM Attendent_Schedule WHERE attendant_id = ? AND shift_date = ? AND shifts = ?`,
+
+      hasShift = await pool.query(
+        'SELECT COUNT(*) AS count FROM Attendent_Schedule WHERE attendant_id = ? AND shift_date = ? AND shifts = ?',
         [employee_id, updatedDate, shift]
       )
       if (hasShift[0][0].count > 0) {
         return res
           .status(404)
-          .json({ message: 'Employee already has at that time' })
+          .json({ message: 'Employee already has a shift at that time' })
       }
-      const isRainedout = await pool.query(
+
+      isRainedout = await pool.query(
         'SELECT COUNT(*) AS count FROM Games WHERE game_id = ? AND rained_out = 1',
-        [name, updatedDate]
+        [name]
       )
       if (isRainedout[0][0].count > 0) {
         return res.status(404).json({ message: 'Game is rained out' })
       }
-      const isBroken = await pool.query(
+
+      isBroken = await pool.query(
         'SELECT COUNT(*) AS count FROM Games WHERE game_id = ? AND broken = 1',
         [name]
       )
       if (isBroken[0][0].count > 0) {
         return res.status(404).json({ message: 'Game is broken' })
       }
+
       const sql = `INSERT INTO Attendent_Schedule (game_id, attendant_id, shifts, shift_date) VALUES (?, ?, ?, ?)`
       await pool.query(sql, [name, employee_id, shift, updatedDate])
-      res.status(200).json({ message: 'Shift added' })
-    } catch (err) {
-      console.error(err.message)
-      res.status(500).send('Server error')
-    }
-  } else {
-    try {
-      const hours = await pool.query(
-        `SELECT COUNT(*) AS count
-FROM Attendent_Schedule
-WHERE attendant_id = ?
-  AND shift_date >= DATE_SUB(NOW(), INTERVAL WEEKDAY(NOW()) DAY)
-  AND shift_date < DATE_ADD(DATE_SUB(NOW(), INTERVAL WEEKDAY(NOW()) DAY), INTERVAL 7 DAY);
-`,
-        [employee_id]
-      )
-      const TotalHours = hours[0][0].count * 4
-      if (TotalHours >= 37) {
-        return res.status(404).json({ message: 'Employee is over 40 Hours' })
-      }
+      return res.status(200).json({ message: 'Shift added' })
 
-      const count = await pool.query(
+      // Handle other types (e.g., 'attractions')
+    } else {
+      count = await pool.query(
         'SELECT COUNT(*) AS count FROM Attendent_Schedule WHERE attraction_id = ? AND shift_date = ? AND shifts = ?',
         [name, updatedDate, shift]
       )
@@ -1077,138 +1073,156 @@ WHERE attendant_id = ?
           .status(404)
           .json({ message: 'Too many people on specific shift' })
       }
-      const hasShift = await pool.query(
-        `SELECT COUNT(*) AS count FROM Attendent_Schedule WHERE attendant_id = ? AND shift_date = ? AND shifts = ?`,
+
+      hasShift = await pool.query(
+        'SELECT COUNT(*) AS count FROM Attendent_Schedule WHERE attendant_id = ? AND shift_date = ? AND shifts = ?',
         [employee_id, updatedDate, shift]
       )
       if (hasShift[0][0].count > 0) {
         return res
           .status(404)
-          .json({ message: 'Employee already has at that time' })
+          .json({ message: 'Employee already has a shift at that time' })
       }
-      const isRainedout = await pool.query(
+
+      isRainedout = await pool.query(
         'SELECT COUNT(*) AS count FROM Attraction WHERE attraction_id = ? AND rained_out = 1',
         [name]
       )
       if (isRainedout[0][0].count > 0) {
         return res.status(404).json({ message: 'Attraction is rained out' })
       }
-      const isBroken = await pool.query(
+
+      isBroken = await pool.query(
         'SELECT COUNT(*) AS count FROM Attraction WHERE attraction_id = ? AND broken = 1',
         [name]
       )
       if (isBroken[0][0].count > 0) {
         return res.status(404).json({ message: 'Attraction is broken' })
       }
+
       const sql = `INSERT INTO Attendent_Schedule (attraction_id, attendant_id, shifts, shift_date) VALUES (?, ?, ?, ?)`
       await pool.query(sql, [name, employee_id, shift, updatedDate])
-      res.status(200).json({ message: 'Shift added' })
-    } catch (err) {
-      console.error(err.message)
-      res.status(500).send('Server error')
+      return res.status(200).json({ message: 'Shift added' })
     }
+  } catch (err) {
+    console.error(err.message)
+    return res.status(500).send('Server error')
   }
 }
+
 export const Notifications = async (req, res) => {
   const { account_id } = req.body
+
   try {
-    const sql = `SELECT 
-    t.updatedDate, 
-    r.name, 
-    t.trigger_id, 
-    t.type,
-    t.broken AS status
-FROM 
-    Trigger_RideMaintenance AS t 
-LEFT JOIN 
-    RideMaintenanceSeen AS s ON t.trigger_id = s.trigger_id AND s.user_id = ? 
-LEFT JOIN
-    Rides AS r ON t.ride_id = r.ride_id
-WHERE 
-    (s.seen_id IS NULL  OR s.seen_id = 0)
-    AND t.broken = 1
-UNION
-SELECT
-    t.updatedDate, 
-    g.name, 
-    t.trigger_id, 
-    t.type,
-    t.broken
-FROM
-    Trigger_GameMaintenance AS t
-LEFT JOIN
-    GameMaintenanceSeen AS s ON t.trigger_id = s.trigger_id AND s.user_id = ?
-LEFT JOIN
-    Games AS g ON t.game_id = g.game_id
-WHERE
-    (s.seen_id IS NULL OR s.seen_id = 0)
-    AND t.broken = 1
-UNION
-SELECT
-    t.updatedDate, 
-    a.name, 
-    t.trigger_id, 
-    t.type,
-    t.rainout as status
-FROM
-    Trigger_AttractionRainout AS t
-LEFT JOIN
-    AttractionRainoutSeen AS s ON t.trigger_id = s.trigger_id AND s.user_id = ?
-LEFT JOIN
-    Attraction AS a ON t.attraction_id = a.attraction_id
-WHERE
-    (s.seen_id IS NULL OR s.seen_id = 0)
-    AND t.rainout = 1
-UNION
-SELECT
-    t.updatedDate, 
-    r.name, 
-    t.trigger_id, 
-    t.type,
-    t.rainout AS status
-FROM
-    Trigger_RideRainout AS t
-LEFT JOIN
-    RideRainoutSeen AS s ON t.trigger_id = s.trigger_id AND s.user_id = ?
-LEFT JOIN
-    Rides AS r ON t.ride_id = r.ride_id
-WHERE
-    (s.seen_id IS NULL OR s.seen_id = 0)
-    AND t.rainout = 1
-UNION
-SELECT
-    t.updatedDate, 
-    g.name, 
-    t.trigger_id, 
-    t.type,
-    t.rainout AS status
-FROM
-    Trigger_GameRainout AS t
-LEFT JOIN
-    GameRainoutSeen AS s ON t.trigger_id = s.trigger_id AND s.user_id = ?
-LEFT JOIN
-    Games AS g ON t.game_id = g.game_id
-WHERE
-    (s.seen_id IS NULL OR s.seen_id = 0)
-    AND t.rainout = 1
-UNION
-SELECT
-    t.updatedDate, 
-    a.name, 
-    t.trigger_id, 
-    t.type,
-    t.broken AS status
-FROM
-    Trigger_AttractionMaintenance AS t
-LEFT JOIN
-    AttractionMaintenanceSeen AS s ON t.trigger_id = s.trigger_id AND s.user_id = ?
-LEFT JOIN
-    Attraction AS a ON t.attraction_id = a.attraction_id
-WHERE
-    (s.seen_id IS NULL OR s.seen_id = 0)
-    AND t.broken = 1
-ORDER BY updatedDate DESC;
-`
+    const sql = `
+      SELECT 
+          t.date AS lastUpdated, 
+          r.name, 
+          t.trigger_id, 
+          t.type, 
+          t.broken AS status
+      FROM 
+          Trigger_RideMaintenance AS t
+      LEFT JOIN 
+          RideMaintenanceSeen AS s ON t.trigger_id = s.trigger_id AND s.user_id = ?
+      LEFT JOIN
+          Rides AS r ON t.ride_id = r.ride_id
+      WHERE 
+          (s.seen_id IS NULL OR s.seen_id = 0)
+          AND t.broken = 1
+
+      UNION
+
+      SELECT
+          t.date AS lastUpdated, 
+          g.name, 
+          t.trigger_id, 
+          t.type, 
+          t.broken AS status
+      FROM
+          Trigger_GameMaintenance AS t
+      LEFT JOIN
+          GameMaintenanceSeen AS s ON t.trigger_id = s.trigger_id AND s.user_id = ?
+      LEFT JOIN
+          Games AS g ON t.game_id = g.game_id
+      WHERE
+          (s.seen_id IS NULL OR s.seen_id = 0)
+          AND t.broken = 1
+
+      UNION
+
+      SELECT
+          t.date AS lastUpdated, 
+          a.name, 
+          t.trigger_id, 
+          t.type, 
+          t.rainout AS status
+      FROM
+          Trigger_AttractionRainout AS t
+      LEFT JOIN
+          AttractionRainoutSeen AS s ON t.trigger_id = s.trigger_id AND s.user_id = ?
+      LEFT JOIN
+          Attraction AS a ON t.attraction_id = a.attraction_id
+      WHERE
+          (s.seen_id IS NULL OR s.seen_id = 0)
+          AND t.rainout = 1
+
+      UNION
+
+      SELECT
+          t.date AS lastUpdated, 
+          r.name, 
+          t.trigger_id, 
+          t.type, 
+          t.rainout AS status
+      FROM
+          Trigger_RideRainout AS t
+      LEFT JOIN
+          RideRainoutSeen AS s ON t.trigger_id = s.trigger_id AND s.user_id = ?
+      LEFT JOIN
+          Rides AS r ON t.ride_id = r.ride_id
+      WHERE
+          (s.seen_id IS NULL OR s.seen_id = 0)
+          AND t.rainout = 1
+
+      UNION
+
+      SELECT
+          t.date AS lastUpdated, 
+          g.name, 
+          t.trigger_id, 
+          t.type, 
+          t.rainout AS status
+      FROM
+          Trigger_GameRainout AS t
+      LEFT JOIN
+          GameRainoutSeen AS s ON t.trigger_id = s.trigger_id AND s.user_id = ?
+      LEFT JOIN
+          Games AS g ON t.game_id = g.game_id
+      WHERE
+          (s.seen_id IS NULL OR s.seen_id = 0)
+          AND t.rainout = 1
+
+      UNION
+
+      SELECT
+          t.date AS lastUpdated, 
+          a.name, 
+          t.trigger_id, 
+          t.type, 
+          t.broken AS status
+      FROM
+          Trigger_AttractionMaintenance AS t
+      LEFT JOIN
+          AttractionMaintenanceSeen AS s ON t.trigger_id = s.trigger_id AND s.user_id = ?
+      LEFT JOIN
+          Attraction AS a ON t.attraction_id = a.attraction_id
+      WHERE
+          (s.seen_id IS NULL OR s.seen_id = 0)
+          AND t.broken = 1
+
+      ORDER BY lastUpdated DESC;
+    `
 
     const notifications = await pool.query(sql, [
       account_id,
@@ -1218,12 +1232,14 @@ ORDER BY updatedDate DESC;
       account_id,
       account_id
     ])
+
     res.status(200).json({ notifications: notifications[0] })
   } catch (err) {
-    console.error(err.message)
+    console.error('Error fetching notifications:', err.message)
     res.status(500).send('Server error')
   }
 }
+
 export const SeenNotifications = async (req, res) => {
   const { account_id, trigger_id, type } = req.body
   try {
@@ -1465,149 +1481,152 @@ export const EditAttraction = async (req, res) => {
 export const GetRevenueReports = async (req, res) => {
   try {
     const { start_date, end_date, type } = req.body
+
     if (type === 'rides') {
       const sql = `SELECT 
-    DATE_FORMAT(RV.visit_date, '%Y-%m-%d') AS date,
-    R.name AS name,
-    SUM(RV.num_tickets) AS quantity,
-    SUM(RV.cost) AS revenue
-FROM
-    Ride_Visited AS RV
-JOIN
-    Rides AS R ON RV.ride_id = R.ride_id
-WHERE
-    RV.visit_date >= ? AND RV.visit_date <= ?
-GROUP BY
-    DATE(RV.visit_date), R.name
-ORDER BY
-    DATE(RV.visit_date) DESC;
-`
+        DATE_FORMAT(RV.visit_date, '%Y-%m-%d') AS date,
+        R.name AS name,
+        SUM(RV.num_tickets) AS quantity,
+        SUM(RV.cost) AS revenue
+      FROM
+        Ride_Visited AS RV
+      JOIN
+        Rides AS R ON RV.ride_id = R.ride_id
+      WHERE
+        RV.visit_date >= ? AND RV.visit_date <= ?
+      GROUP BY
+        date, R.name
+      ORDER BY
+        date DESC;
+      `
       const revenueReport = await pool.query(sql, [start_date, end_date])
       res.status(200).json({ revenueReport: revenueReport[0] })
     }
+
     if (type === 'games') {
       const sql = `SELECT
-    DATE_FORMAT(GV.date_visited, '%Y-%m-%d') AS date,
-    G.name AS name,
-    SUM(GV.num_tickets) AS quantity,
-    SUM(GV.cost) AS revenue
-FROM
-    Game_Visited AS GV
-JOIN
-    Games AS G ON GV.game_id = G.game_id
-WHERE
-    GV.date_visited >= ? AND GV.date_visited <= ?
-GROUP BY
-    DATE(GV.date_visited), G.name
-ORDER BY
-    DATE(GV.date_visited) DESC;
-`
+        DATE_FORMAT(GV.date_visited, '%Y-%m-%d') AS date,
+        G.name AS name,
+        SUM(GV.num_tickets) AS quantity,
+        SUM(GV.cost) AS revenue
+      FROM
+        Game_Visited AS GV
+      JOIN
+        Games AS G ON GV.game_id = G.game_id
+      WHERE
+        GV.date_visited >= ? AND GV.date_visited <= ?
+      GROUP BY
+        date, G.name
+      ORDER BY
+        date DESC;
+      `
       const revenueReport = await pool.query(sql, [start_date, end_date])
       res.status(200).json({ revenueReport: revenueReport[0] })
     }
+
     if (type === 'attractions') {
       const sql = `SELECT
-    DATE_FORMAT(AV.visit_date,'%Y-%m-%d') AS date,
-    A.name AS name,
-    SUM(AV.num_tickets) AS quantity,
-    SUM(AV.cost) AS revenue
-FROM
-    Attraction_Visited AS AV
-JOIN
-    Attraction AS A ON AV.attraction_id = A.attraction_id
-WHERE
-    AV.visit_date >= ? AND AV.visit_date <= ?
-GROUP BY
-    DATE(AV.visit_date), A.name
-ORDER BY
-    DATE(AV.visit_date) DESC;
-`
+        DATE_FORMAT(AV.visit_date, '%Y-%m-%d') AS date,
+        A.name AS name,
+        SUM(AV.num_tickets) AS quantity,
+        SUM(AV.cost) AS revenue
+      FROM
+        Attraction_Visited AS AV
+      JOIN
+        Attraction AS A ON AV.attraction_id = A.attraction_id
+      WHERE
+        AV.visit_date >= ? AND AV.visit_date <= ?
+      GROUP BY
+        date, A.name
+      ORDER BY
+        date DESC;
+      `
       const revenueReport = await pool.query(sql, [start_date, end_date])
       res.status(200).json({ revenueReport: revenueReport[0] })
     }
+
     if (type === 'gifts') {
       const sql = `SELECT
-    DATE_FORMAT(GC.date,'%Y-%m-%d') AS date,
-    GI.name AS name,
-    SUM(GC.quantity) AS quantity,
-    SUM(GC.cost) AS revenue
-FROM
-    Gift_Cart AS GC
-JOIN
-    Gift_Items AS GI ON GC.gift_id = GI.gift_id
-WHERE
-    GC.date >= ? AND GC.date <= ?
-    AND
-    GC.purchased = 1
-GROUP BY
-    DATE(GC.date), GI.name
-ORDER BY
-    DATE(GC.date) DESC;
-`
+        DATE_FORMAT(GC.date, '%Y-%m-%d') AS date,
+        GI.name AS name,
+        SUM(GC.quantity) AS quantity,
+        SUM(GC.cost) AS revenue
+      FROM
+        Gift_Cart AS GC
+      JOIN
+        Gift_Items AS GI ON GC.gift_id = GI.gift_id
+      WHERE
+        GC.date >= ? AND GC.date <= ?
+        AND GC.purchased = 1
+      GROUP BY
+        date, GI.name
+      ORDER BY
+        date DESC;
+      `
       const revenueReport = await pool.query(sql, [start_date, end_date])
       res.status(200).json({ revenueReport: revenueReport[0] })
     }
+
     if (type === '*') {
       const sql = `SELECT
-    DATE_FORMAT(RV.visit_date,'%Y-%m-%d') AS date,
-    R.name AS name,
-    SUM(RV.num_tickets) AS quantity,
-    SUM(RV.cost) AS revenue
-FROM
-    Ride_Visited AS RV
-JOIN
-    Rides AS R ON RV.ride_id = R.ride_id
-WHERE
-    RV.visit_date >= ? AND RV.visit_date <= ?
-GROUP BY
-    DATE(RV.visit_date), R.name
-UNION
-SELECT
-    DATE_FORMAT(GV.date_visited,'%Y-%m-%d') AS date,
-    G.name AS name,
-    SUM(GV.num_tickets) AS quantity,
-    SUM(GV.cost) AS revenue
-FROM
-    Game_Visited AS GV
-JOIN
-    Games AS G ON GV.game_id = G.game_id
-WHERE
-    GV.date_visited >= ? AND GV.date_visited <= ?
-GROUP BY
-    DATE(GV.date_visited), G.name
-UNION
-SELECT
-    DATE_FORMAT(AV.visit_date,'%Y-%m-%d') AS date,
-    A.name AS name,
-    SUM(AV.num_tickets) AS quantity,
-    SUM(AV.cost) AS revenue
-FROM
-    Attraction_Visited AS AV
-JOIN
-    Attraction AS A ON AV.attraction_id = A.attraction_id
-WHERE
-    AV.visit_date >= ? AND AV.visit_date <= ?
-GROUP BY
-    DATE(AV.visit_date), A.name
-UNION
-SELECT
-    DATE_FORMAT(GC.date,'%Y-%m-%d') AS date,
-    GI.name AS name,
-    SUM(GC.quantity) AS quantity,
-    SUM(GC.cost) AS revenue
-FROM
-    Gift_Cart AS GC
-JOIN
-    Gift_Items AS GI ON GC.gift_id = GI.gift_id
-WHERE
-    GC.date >= ? AND GC.date <= ?
-    AND
-    GC.purchased = 1
-GROUP BY
-    DATE(GC.date), GI.name
-ORDER BY
-    DATE DESC;
-`
+        DATE_FORMAT(RV.visit_date, '%Y-%m-%d') AS date,
+        R.name AS name,
+        SUM(RV.num_tickets) AS quantity,
+        SUM(RV.cost) AS revenue
+      FROM
+        Ride_Visited AS RV
+      JOIN
+        Rides AS R ON RV.ride_id = R.ride_id
+      WHERE
+        RV.visit_date >= ? AND RV.visit_date <= ?
+      GROUP BY
+        date, R.name
+      UNION
+      SELECT
+        DATE_FORMAT(GV.date_visited, '%Y-%m-%d') AS date,
+        G.name AS name,
+        SUM(GV.num_tickets) AS quantity,
+        SUM(GV.cost) AS revenue
+      FROM
+        Game_Visited AS GV
+      JOIN
+        Games AS G ON GV.game_id = G.game_id
+      WHERE
+        GV.date_visited >= ? AND GV.date_visited <= ?
+      GROUP BY
+        date, G.name
+      UNION
+      SELECT
+        DATE_FORMAT(AV.visit_date, '%Y-%m-%d') AS date,
+        A.name AS name,
+        SUM(AV.num_tickets) AS quantity,
+        SUM(AV.cost) AS revenue
+      FROM
+        Attraction_Visited AS AV
+      JOIN
+        Attraction AS A ON AV.attraction_id = A.attraction_id
+      WHERE
+        AV.visit_date >= ? AND AV.visit_date <= ?
+      GROUP BY
+        date, A.name
+      UNION
+      SELECT
+        DATE_FORMAT(GC.date, '%Y-%m-%d') AS date,
+        GI.name AS name,
+        SUM(GC.quantity) AS quantity,
+        SUM(GC.cost) AS revenue
+      FROM
+        Gift_Cart AS GC
+      JOIN
+        Gift_Items AS GI ON GC.gift_id = GI.gift_id
+      WHERE
+        GC.date >= ? AND GC.date <= ?
+        AND GC.purchased = 1
+      GROUP BY
+        date, GI.name
+      ORDER BY
+        date DESC;
+      `
       const revenueReport = await pool.query(sql, [
         start_date,
         end_date,
@@ -1625,6 +1644,7 @@ ORDER BY
     res.status(500).send('Server error')
   }
 }
+
 export const GetRevenueGraph = async (req, res) => {
   try {
     const { start_date, end_date, type } = req.body

@@ -77,7 +77,7 @@ export const login = async (req, res) => {
     }
     const token = jwt.sign(
       { id: user[0][0].account_id },
-      process.env.TOKEN_SECRET,
+      '447906903577e810dda5084789d1d81ec38996b6434c83683b18a8c3a78ca2677e61c52821f04a58903cabb98da05a4833c7de45cf6cfe67fb6a7c88e2b96614',
       {
         expiresIn: '1h'
       }
@@ -98,7 +98,7 @@ export const verifyJWT = (req, res, next) => {
   if (!token) {
     return res.status(401).send('Not Authenticated')
   }
-  jwt.verify(token, process.env.TOKEN_SECRET, (err, decode) => {
+  jwt.verify(token, '447906903577e810dda5084789d1d81ec38996b6434c83683b18a8c3a78ca2677e61c52821f04a58903cabb98da05a4833c7de45cf6cfe67fb6a7c88e2b96614', (err, decode) => {
     if (err) {
       return res.status(401).send('Invalid Token')
     }

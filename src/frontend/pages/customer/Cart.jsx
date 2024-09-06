@@ -125,9 +125,10 @@ function Cart () {
   }
   function removeGame (id) {
     setGameData(prev => prev.filter(item => item.Game_Cart_id !== id))
-    axiosApi
-      .delete(`/customer/DeleteRideCartItem/${id}`)
-      .then(response => {})
+    axiosApi.delete(`/customer/DeleteGameCartItem/${id}`)
+      .then(response => {
+        console.log(response)
+      })
       .catch(error => {
         console.log(error)
       })

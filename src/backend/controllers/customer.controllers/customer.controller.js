@@ -134,7 +134,7 @@ export const AddToGiftCart = async (req, res) => {
       .split('T')[0]
 
     const sql = `
-    INSERT INTO Gift_Cart (account_id, gift_id, quantity, size, cost, purchased, date) VALUES(?,?,?,?,?,?,?)`
+    INSERT INTO Gift_Cart (account_id, gift_id, quantity, size, cost, purchased) VALUES(?,?,?,?,?,?)`
     const newCartItem = await pool.query(sql, [
       account_id,
       gift_id,
@@ -142,7 +142,6 @@ export const AddToGiftCart = async (req, res) => {
       size,
       TotalCost,
       false,
-      currentDateWithoutTime
     ])
     res.status(200).json(newCartItem)
   } catch (error) {
@@ -222,13 +221,14 @@ export const AddToRideCart = async (req, res) => {
       return
     }
     let CheckIfWorking = await pool.query(
-      'SELECT COUNT(*) FROM Rides WHERE ride_id = ? AND broken = 1 OR rained_out = 1',
+      'SELECT COUNT(*) AS ride_count FROM Rides WHERE ride_id = ? AND (broken = 1 OR rained_out = 1)',
       [ride_id]
     )
-    if (CheckIfWorking[0][0]['COUNT(*)'] > 0) {
+    if (CheckIfWorking[0][0]['ride_count'] > 0) {
       res.status(401).json('Ride is broken or rained out')
       return
     }
+
     let CheckRideCart = await pool.query(
       'SELECT COUNT(*) FROM Ride_Cart WHERE account_id = ? AND ride_id = ? AND purchased = false',
       [account_id, ride_id]
@@ -342,6 +342,7 @@ WHERE
 export const GetGameCart = async (req, res) => {
   try {
     const { account_id } = req.params
+    console.log(account_id)
     const sql = `
     SELECT
     G.name,
@@ -465,6 +466,10 @@ export const DecrementRideCartItemandCost = async (req, res) => {
     const sql =
       'UPDATE Ride_Cart SET quantity = quantity - 1, cost = cost - 5 WHERE Ride_Cart_id = ?'
     const updateCartItem = await pool.query(sql, [id])
+    if (updateCartItem[0].quantity <= 1) {
+      res.status(400).send('Cannot decrement item below 1')
+      return
+    }
     res.json(updateCartItem)
   } catch (error) {
     console.error(error.message)
@@ -477,6 +482,10 @@ export const DecrementGameCartItemandCost = async (req, res) => {
     const sql =
       'UPDATE Game_Cart SET quantity = quantity - 1, cost = cost - 3 WHERE Game_Cart_id = ?'
     const updateCartItem = await pool.query(sql, [id])
+    if (updateCartItem[0].quantity <= 1) {
+      res.status(400).send('Cannot decrement item below 1')
+      return
+    }
     res.json(updateCartItem)
   } catch (error) {
     console.error(error.message)
@@ -489,6 +498,10 @@ export const DecrementAttractionCartItemandCost = async (req, res) => {
     const sql =
       'UPDATE Attraction_Cart SET quantity = quantity - 1, cost = cost - 12 WHERE Attraction_Cart_id = ?'
     const updateCartItem = await pool.query(sql, [id])
+    if (updateCartItem[0].quantity <= 1) {
+      res.status(400).send('Cannot decrement item below 1')
+      return
+    }
     res.json(updateCartItem)
   } catch (error) {
     console.error(error.message)

@@ -21,7 +21,7 @@ initializeServer().then(app => {
   app.use('/admin', AdminRoutes)
   app.use('/customer', CustomerRoutes)
   app.use('/attendant', AttendantRoutes)
-  const port = process.env.PORT || 3000 //80 please change
+  const port = 3000 
   app.use('/triggers', TriggersRoutes)
     app.listen(port, () => {
       console.log('Server is running on port 3000.')
